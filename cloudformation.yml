@@ -18,8 +18,7 @@ Resources:
           $(aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 897729109985.dkr.ecr.eu-west-1.amazonaws.com)
           docker pull 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
           
-          # Docker-Container starten und auf Port 80 bereitstellen
-          docker run -d -p 443:443 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
+          docker run -d -p 80:80 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
 
   MySecurityGroup:
     Type: AWS::EC2::SecurityGroup
