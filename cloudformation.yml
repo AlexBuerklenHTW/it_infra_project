@@ -19,7 +19,7 @@ Resources:
           docker pull 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
           
           # Docker-Container starten und auf Port 80 bereitstellen
-          docker run -d -p 80:80 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
+          docker run -d -p 443:443 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
 
   MySecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -27,12 +27,8 @@ Resources:
       GroupDescription: Enable HTTP and HTTPS access
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-         - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
+          FromPort: 443
+          ToPort: 443
           CidrIp: 0.0.0.0/0
 
   EC2InstanceProfile:
