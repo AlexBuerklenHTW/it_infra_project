@@ -1,39 +1,35 @@
 Resources:
-  MyVPC:
-    Type: AWS::EC2::VPC
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
     Properties:
-      CidrBlock: "10.0.0.0/16"
-      EnableDnsSupport: "true"
-      EnableDnsHostnames: "true"
+      InstanceType: t2.micro  
+      ImageId: ami-03ca36368dbc9cfa1   
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SecurityGroups:
+        - !Ref MySecurityGroup
+      UserData: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          dnf install docker -y
+          systemctl start docker
+          usermod -a -G docker ec2-user
 
-  MySubnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref MyVPC  
-      CidrBlock: "10.0.0.0/24"
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]  
-      MapPublicIpOnLaunch: "true"  
-  MyInternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties: {}
+          $(aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 897729109985.dkr.ecr.eu-west-1.amazonaws.com)
+          docker pull 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
+          docker run -d -p 8080:8080 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
 
-  AttachInternetGateway:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId: !Ref MyVPC
-      InternetGatewayId: !Ref MyInternetGateway
 
   MySecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: "Enable HTTP access"
-      VpcId: !Ref MyVPC 
+      GroupDescription: Enable HTTP access
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:  
+      SecurityGroupEgress: 
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
@@ -66,24 +62,3 @@ Resources:
                   - ecr:BatchGetImage
                   - ecr:GetAuthorizationToken
                 Resource: "*"
-
-  MyEC2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.micro  
-      ImageId: ami-03ca36368dbc9cfa1
-      IamInstanceProfile: !Ref EC2InstanceProfile
-      SecurityGroups:
-        - !Ref MySecurityGroup  
-      SubnetId: !Ref MySubnet  
-      UserData: 
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          yum update -y
-          dnf install docker -y
-          systemctl start docker
-          usermod -a -G docker ec2-user
-
-          $(aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 897729109985.dkr.ecr.eu-west-1.amazonaws.com)
-          docker pull 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest
-          docker run -d -p 80:80 897729109985.dkr.ecr.eu-west-1.amazonaws.com/alex_it_infra_project:latest

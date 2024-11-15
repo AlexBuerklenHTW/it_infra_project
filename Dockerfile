@@ -1,4 +1,6 @@
-FROM nginx
-COPY index.html /usr/share/nginx/html/index.html
-COPY nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
+FROM node:16
+RUN npm install -g http-server
+COPY index.html /usr/share/html/index.html
+WORKDIR /usr/share/html
+EXPOSE 8080
+CMD ["http-server", ".", "-p", "8080"]
