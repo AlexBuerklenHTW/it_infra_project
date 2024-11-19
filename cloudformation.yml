@@ -1,7 +1,7 @@
 Parameters:
   InstanceVersion:
     Type: String
-    Default: "latest" # Standardmäßig 'latest', kann bei Bedarf angepasst werden.
+    Default: "latest" 
 
 Resources:
   MyEC2Instance:
