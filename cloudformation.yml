@@ -74,7 +74,7 @@ Resources:
       Protocol: HTTP
       Port: 80
       TargetType: instance
-      VpcId: '' # VPC-ID hinzufügen
+      VpcId: 'vpc-0acfaa03995941f03' 
       HealthCheckEnabled: true
 
   MyListener:
