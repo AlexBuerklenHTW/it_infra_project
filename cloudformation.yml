@@ -62,7 +62,9 @@ Resources:
       Type: application
       SecurityGroups:
         - !Ref MySecurityGroup
-      Subnets: [] # Subnetz hinzufügen, sobald verfügbar
+      Subnets: 
+        - subnet-0df5f35e24f2ad1b5
+        - 
       Tags:
         - Key: Name
           Value: MyLoadBalancer
