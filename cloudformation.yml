@@ -64,7 +64,7 @@ Resources:
         - !Ref MySecurityGroup
       Subnets: 
         - subnet-0df5f35e24f2ad1b5
-        - 
+        - subnet-0fe0163065a6cc46b
       Tags:
         - Key: Name
           Value: MyLoadBalancer
