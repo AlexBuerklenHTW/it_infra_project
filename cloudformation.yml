@@ -53,9 +53,11 @@ Resources:
         - Key: Name
           Value: MyEC2Instance
           PropagateAtLaunch: true
+    DependsOn: MySecurityGroup  # Sicherstellen, dass die Sicherheitsgruppe zuerst erstellt wird
 
   MyLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: MySecurityGroup  # Sicherstellen, dass die Sicherheitsgruppe zuerst erstellt wird
     Properties:
       Name: MyLoadBalancer
       Scheme: internet-facing
@@ -93,6 +95,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP access
+      VpcId: 'vpc-0acfaa03995941f03'  # Stelle sicher, dass die VPC korrekt angegeben ist
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
